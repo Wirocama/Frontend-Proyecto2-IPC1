@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Carga Másiva | Fotografía 16 20</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/reset.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/main2.css" />
+
+</head>
+
+<body>
+
+    <div id="header">
+
+        <div class="container">
+
+            <h1>Fotografía 16 20</h1>
+            <div id="main_menu">
+
+                <ul>
+                    <li class="first_list"><a href="login.html" class="main_menu_first"
+                        sessionStorage.clear()>Cerrar Sesión</a></li>
+                </ul>
+
+            </div> <!-- END #main_menu -->
+
+        </div> <!-- END .container -->
+
+    </div> <!-- END #header -->
+
+    <div id="main_content">
+
+        <div id="portfolio_area">
+
+            <div class="container">
+
+                <div id="portfolio_menu">
+
+                    <ul>
+                        <li><a href="posts-admin.html">Todos los Posts</a></li>
+                        <li><a href="publicarpost-admin.html">Publicar Post</a></li>
+                        <li><a href="misposts-admin.html">Mis Posts</a></li>
+                        <li><a href="perfil-admin.html">Perfil</a></li>
+                        <li><a href="carga-masiva.html">Carga Másiva</a></li>
+                        <li><a href="visualizacion.html">Visualizaciones</a></li>
+                        <li><a href="reportes.html">Reportes</a></li>
+                    </ul>
+
+                </div> <!-- END #portfolio_menu -->
+
+            </div> <!-- END .container -->
+
+        </div> <!-- END #portfolio_area -->
+
+    </div> <!-- END #main_content -->
+
+
+    <div id="main_content">
+
+        <div class="container3">
+
+            <center>
+
+                <h3>Opciones de Carga</h3>
+                </br>
+                </br>
+                <button type="button" class="btn btn-primary" onclick="cargaUsuarios()">Cargar Usuarios</button>
+                <button type="button" class="btn btn-primary" onclick="cargarPublicaciones()">Cargar Publicaciones</button>
+                
+            </center>
+
+
+        </div> <!-- END .container -->
+        <div  class="container3">
+        </br>
+        </br>
+
+            
+
+            <div id="footer2">
+                
+
+            </div>
+
+        </div> 
+
+
+    </div> <!-- END #main_content -->
+
+
+    <div id="main_content2">
+
+
+
+    </div> <!-- END #main_content -->
+
+    
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <script>
+
+        var usuarioG = sessionStorage.getItem('usuario');
+        var idG = sessionStorage.getItem('id');
+
+        function cargaUsuarios() {
+
+            var infoUsuarios = document.querySelector('#footer2')
+
+            infoUsuarios.innerHTML = `
+            <h3>Selecciona un Archivo:</h3>
+            <br>
+            <br>
+            <div class="container">
+
+                <div id="main_menu2">
+
+                    <input type="file" id="file-usuarios"  class="btn btn-success"/>
+                    <button type="button" class="btn btn-primary" onclick="cargarArchivoUsuarios()">Cargar Usuarios del Archivo</button>
+
+                </div> <!-- END #main_menu -->
+
+            </div>
+            
+            
+            
+            `   
+        }
+
+    function cargarPublicaciones() {
+
+        var infoPublicaciones = document.querySelector('#footer2')
+
+        infoPublicaciones.innerHTML = `
+        <h3>Selecciona un Archivo:</h3>
+        <br>
+        <br>
+        <div class="container">
+
+            <div id="main_menu2">
+
+                <input type="file" id="file-publicaciones"  class="btn btn-success"/>
+                <button type="button" class="btn btn-primary" onclick="cargarArchivoPublicaciones()">Cargar Publicaciones del Archivo</button>
+
+            </div> <!-- END #main_menu -->
+
+        </div>
+
+        `
+        }
+
+    async function cargarArchivoUsuarios(){
+
+        let archivo = document.getElementById('file-usuarios').files[0]
+        console.log(archivo)
+
+        const reader = new FileReader()
+
+        reader.addEventListener("load", (event) =>{
+            console.log(event.target.result)
+            enviarInfoUsuarios(JSON.parse(event.target.result))
+        })
+
+        reader.readAsText(archivo, "UTF-8")
+            
+    }
+
+    async function enviarInfoUsuarios(jsonCM){
+            
+        var val = true
+
+        for(i=0; i<jsonCM.length;i++){
+            var genero = ""
+            var nombre = jsonCM[i].name
+            var generoAux = jsonCM[i].gender
+
+            if(generoAux=="M"){
+                genero = "Masculino"
+            }
+            else if(generoAux =="F"){
+                genero = "Femenino"
+            }    
+            var usuario = jsonCM[i].username
+            var correo = jsonCM[i].email
+            var contrasenia = jsonCM[i].password
+            var objeto = {
+                "nombre": nombre,
+                "genero" : genero,
+                "nusuario": usuario,
+                "correo": correo,
+                "contrasenia": contrasenia,
+                "conf_contrasenia": contrasenia,
+                "tipousuario": "Cliente"
+            }
+            console.log(objeto)
+
+            fetch('http://127.0.0.1:5000/crear_usuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(objeto)
+            })
+            .then(res => res.json())
+            .catch(err => {
+                console.log(err)
+                val = false
+            })
+            .then(response => {
+                console.log(response)          
+            })
+        }    
+        if (val = true){
+            window.alert("Se Cargaron los Usuarios al Sistema")
+            window.location.href = "carga-masiva.html";
+        }
+    }
+
+    async function cargarArchivoPublicaciones(){
+
+        let archivo = document.getElementById('file-publicaciones').files[0]
+        console.log(archivo)
+
+        const reader = new FileReader()
+
+        reader.addEventListener("load", (event) =>{
+            console.log(event.target.result)
+            enviarInfoPublicaciones(JSON.parse(event.target.result))
+        })
+
+        reader.readAsText(archivo, "UTF-8")
+
+    }
+
+    async function enviarInfoPublicaciones(jsonCM){
+
+        publicacionesImagenes(jsonCM)
+        publicacionesVideos(jsonCM)
+                  
+    }
+
+    async function publicacionesImagenes(jsonCM){
+        
+        for(i=0; i<jsonCM.images.length;i++){
+            var url = jsonCM.images[i].url
+            var date = jsonCM.images[i].date
+            var category = jsonCM.images[i].category
+               
+            var objeto = {
+                "type": "Imagen",
+                "url" : url,
+                "date": date,
+                "category": category,
+                "idU": idG,
+                "usuario": usuarioG,
+                "estado": 2       
+            }
+            console.log(objeto)
+
+            await fetch('http://127.0.0.1:5000/crear_publicacion', {
+                method: 'POST',
+                headers: {
+                        'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(objeto)
+            })
+            .then(res => res.json())
+            .catch(err => {
+                console.log(err)
+                
+            })
+            .then(response => {
+                console.log(response)          
+            })
+        }    
+
+    }
+    async function publicacionesVideos(jsonCM){
+        var val = true
+        
+        for(i=0; i<jsonCM.videos.length;i++){
+
+            var url = jsonCM.videos[i].url
+            var date = jsonCM.videos[i].date
+            var category = jsonCM.videos[i].category
+                
+            var objeto = {
+                "type": "Video",
+                "url" : url,
+                "date": date,
+                "category": category,
+                "idU": idG,
+                "usuario": usuarioG,
+                "estado": 2       
+            }
+            console.log(objeto)
+
+            await fetch('http://127.0.0.1:5000/crear_publicacion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(objeto)
+            })
+            .then(res => res.json())
+            .catch(err => {
+                console.log(err)
+                val = false
+            })
+            .then(response => {
+                console.log(response)          
+            })
+        } 
+        if (val = true){
+            window.alert("Se Cargaron las Publicaciones al Sistema")
+            window.location.href = "carga-masiva.html";
+        }   
+              
+            
+    }
+
+
+    </script>
+
+</body>
+
+</html>

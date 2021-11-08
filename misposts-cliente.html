@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Mis Post | Fotografía 16 20</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/reset.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/main2.css" />
+
+</head>
+
+<body onload="cargarInfo()">
+
+    <div id="header">
+
+        <div class="container">
+
+            <h1>Fotografía 16 20</h1>
+            <div id="main_menu">
+
+                <ul>
+                    <li class="first_list"><a href="login.html" class="main_menu_first"
+                        sessionStorage.clear()>Cerrar Sesión</a></li>
+                </ul>
+
+            </div> <!-- END #main_menu -->
+
+        </div> <!-- END .container -->
+
+    </div> <!-- END #header -->
+
+    <div id="main_content">
+
+        <div id="portfolio_area">
+
+            <div class="container">
+
+                <div id="portfolio_menu">
+
+                    <ul>
+                        <li><a href="posts-cliente.html">Todos los Posts</a></li>
+                        <li><a href="publicarpost-cliente.html">Publicar Post</a></li>
+                        <li><a href="misposts-cliente.html">Mis Posts</a></li>
+                        <li><a href="perfil-cliente.html">Perfil</a></li>
+                        
+                    </ul>
+
+                </div> <!-- END #portfolio_menu -->
+
+            </div> <!-- END .container -->
+
+        </div> <!-- END #portfolio_area -->
+
+    </div> <!-- END #main_content -->
+
+  
+
+    <div id="main_content">
+
+        <center>
+
+            <h3>Mis Posts</h3>
+
+        </center>
+
+        <div id="portfolio_area">
+            
+
+            <div class="container">
+
+                
+
+                <div id="bloque1">
+
+                
+
+                   
+
+
+                </div> <!-- END #location_map -->
+
+
+            </div>
+
+         
+        </div>
+
+    </div>
+
+    <div id="main_content">
+
+        <div id="footer2"></div>
+
+    </div>
+
+
+    <div id="footer">
+
+        <div class="container">
+
+            <div id="footer_about" class="footer_info">
+                
+                <img src="images/logo.jpeg" height="100" />
+
+            </div> <!-- END #footer_about -->
+
+            <div id="footer_explore" class="footer_info">
+
+
+            </div> <!-- END #footer_about -->
+
+            <div id="footer_browse" class="footer_info">
+
+
+            </div> <!-- END #footer_about -->
+
+            <div id="footer_contact" class="footer_info">
+
+
+
+            </div> <!-- END #footer_about -->
+
+            <div id="footer_connect" class="footer_info">
+
+            </div class="container"> <!-- END #footer_about -->
+
+            <p id="copyright">&copy; Copyright 2020
+                <br />
+            </p>
+
+
+        </div> <!-- END .container -->
+
+    </div> <!-- END #footer -->
+
+    <script>
+
+        var usuarioG = sessionStorage.getItem('usuario');
+        var idG = sessionStorage.getItem('id');
+
+        function cargarInfo() {
+
+            fetch('http://127.0.0.1:5000/publicaciones', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(res => res.json())
+                .catch(err => {
+                    console.log(err)
+                    alert('Ocurrió un Error')
+                })
+                .then(response => {
+                    var publicaciones = response;
+                    var lista_publicaciones = document.querySelector('#bloque1')
+                    var tipo = ''
+                   
+                    publicaciones.forEach(publicacion => {
+
+                        if(publicacion['idUsuario'] == idG){
+
+                            if(publicacion['tipo'] == 'Video'){
+                                tipo = '<iframe width="560" height="315" src="' + publicacion['url'] +'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>'
+                            }
+                            else if (publicacion['tipo'] = 'Imagen'){
+                                tipo = '<img src='+ publicacion['url'] +' height="330" />'
+                            }
+
+                            lista_publicaciones.innerHTML += ` 
+
+                            <div id="contact_info_left">
+                                <div id="location_map">
+                                    <center>
+                                        ${tipo}
+                                
+                                        <h4>°</h4>
+                                        <h4>${publicacion['likes']} likes </h4>
+                                        <h4>Publicado por: ${publicacion['usuario']}</h4>
+                                        <h4>Fecha: ${publicacion['date']}</h4>
+                                        <h4>Categoria: ${publicacion['category']}</h4>
+                                    </center>
+                                    <button type="button" class="btn btn-primary" onclick="like()">Me Gusta</button>
+                                </div> <!-- END #location_map -->
+                            </div> `
+
+                        }
+
+                        
+                    });
+                })
+
+
+        }
+
+       
+
+                  
+
+
+        
+    </script>
+
+</body>
+
+</html>

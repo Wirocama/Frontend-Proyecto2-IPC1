@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> -->
+
+    <title>Registrarse | Fotografía 16 20</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/reset2.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/main.css" />
+
+</head>
+
+<body>
+
+    <div id="header">
+
+        <div class="container">
+
+            <h1>Fotografía 16 20</h1>
+
+            <div id="main_menu">
+
+                <ul>
+                    <li class="first_list"><a href="login.html" class="main_menu_first">home</a></li>
+
+                </ul>
+
+            </div> <!-- END #main_menu -->
+
+        </div> <!-- END .container -->
+
+    </div> <!-- END #header -->
+
+    <div id="main_content">
+
+        <div id="contact_area">
+
+            <div class="container">
+
+                <h2>REGISTRARSE</h2>
+
+                <div >
+
+                    <div id="contact_info_left">
+
+                        <form action="loginf" id="contact_form">
+                            <fieldset>
+                                <ol>
+                                    <li>
+                                        <!-- END #contact_info_left -->
+                                        <label style= "font-size: large;" for="nombre">Nombre Completo:</label><input type="text"  size="70" maxlength=""
+                                            id="nombre" />
+                                    </li>
+                                    <li>
+                                        <!-- END #contact_info_left -->
+                                        <label style= "font-size: large;" for="apellido">Género:</label>
+                                        <select class="second_list second_list_border" id="genero">
+                                            <option value="Masculino">Masculino</option>
+                                            <option value="Femenino">Femenino</option>
+                                            
+                                        </select>
+                                            
+                                    </li>
+                                    <li>
+                                        <!-- END #contact_info_left -->
+                                        <label style= "font-size: large;" for="usuario">Nombre de Usuario:</label><input type="text" size="70" maxlength=""
+                                            id="usuario" />
+                                    </li>
+                                    <li>
+                                        <!-- END #contact_info_left -->
+                                        <label style= "font-size: large;" for="correo">Correo Electrónico:</label><input type="text" size="70" maxlength=""
+                                            id="correo" />
+                                    </li>
+
+                                    <li>
+                                        <!-- END #contact_info_left -->
+                                        <label style= "font-size: large;" for="contrasenia">Contraseña:</label><input type="password" size="70"
+                                            maxlength="" id="contrasenia" />
+
+                                    </li>
+                                    <li>
+                                        <!-- END #contact_info_left -->
+                                        <label style= "font-size: large;" for="conf_contrasenia">Confirmar Contraseña:</label><input type="password" size="70"
+                                            maxlength="" id="conf_contrasenia" />
+
+                                    </li>
+                                    <li>
+                                        </br>
+                                        <button type="button" class="btn btn-primary" onclick="registro()">Registrarse</button> 
+                                        <a href="login.html" class="btn ">¿Ya tienes cuenta? Iniciar Sesión</a>
+
+                                    </li>
+
+                                </ol>
+
+                            </fieldset>
+                        </form>
+
+                    </div> <!-- END #contact_info_left -->
+
+
+                </div> <!-- END #contact_info -->
+
+            </div> <!-- END .container -->
+
+        </div> <!-- END #contact_area -->
+
+    </div> <!-- END #main_content -->
+
+    <!-- CÓDIGO PARA REGISTRARSE -->
+    <script>
+
+        function registro(){
+
+            var nombre = document.getElementById("nombre").value
+
+            var seleccion_genero = document.getElementById("genero").options.selectedIndex
+            var genero = document.getElementById("genero").options[seleccion_genero].text
+     
+            var usuario = document.getElementById("usuario").value
+            var correo = document.getElementById("correo").value 
+            var contrasenia = document.getElementById("contrasenia").value 
+            var conf_contrasenia = document.getElementById("conf_contrasenia").value
+
+            fetch('http://127.0.0.1:5000/crear_usuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "nombre": nombre,
+                    "genero": genero,
+                    "nusuario": usuario,
+                    "correo": correo,
+                    "contrasenia": contrasenia,
+                    "conf_contrasenia": conf_contrasenia,
+                    "tipousuario": "Cliente"
+                })
+            })
+            .then(res => res.json())
+            .catch(err => {
+                console.log(err)
+                window.alert("Error")
+            })
+            .then(response => {
+                console.log(response)
+                if(response.data['estado'] == 1){
+                    window.alert(response.data['nombre'] + " te registraste como: " + response.data['usuario'])
+                    window.location.href = "login.html";
+                }
+                else if(response.data['estado'] == 2){
+                    window.alert("El usuario: " + response.data['usuario'] + " ya existe en el Sistema")
+                    
+                }
+                else if(response.data['estado'] == 3){
+                    window.alert("La contraseña de verificación no coincide")
+                }
+            })
+        }
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> -->
+
+    <title>Fotografía 16 20</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/reset.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/main.css" />
+
+    <!-- JQUERY -->
+
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+</head>
+
+<body >
+
+    <div id="header">
+
+        <div class="container">
+
+            <h1>Fotografía 16 20</h1>
+            
+
+            <div id="main_menu">
+
+                <ul>
+                    <li class="first_list"><a href="login.html" class="main_menu_first">home</a></li>
+
+                </ul>
+
+            </div> <!-- END #main_menu -->
+
+        </div> <!-- END .container -->
+
+    </div> <!-- END #header -->
+
+    <div id="main_content">
+
+        <div id="contact_area">
+
+            <div class="container">
+
+        
+
+                <div id="contact_info">
+
+                    <div id="contact_info_right">
+
+                        <form id="contact_form" role="form">
+                            <fieldset>
+                                <ol>
+                                    <li>
+                                        <!-- END #contact_info_left -->
+                                        <label style= "font-size: large;" for="usuario">Usuario:</label><input type="text" size="60" maxlength=""
+                                            id="usuario" />
+                                    </li>
+                                    <li>
+                                        <!-- END #contact_info_left -->
+                                        <label style= "font-size: large;" for="contrasenia">Contraseña:</label><input type="password" size="60"
+                                            maxlength="" id="contrasenia" />
+                                    </li>
+                                    <li>
+                                        </br>
+                                        <button type="button" class="btn btn-primary" onclick="iniciar()">Iniciar Sesion</button>
+                                        <a href="registro.html" class="btn btn-success">Registrarse</a>
+                                        <!-- <a href="recuperar-password.html" class="btn ">Olvidaste tu contraseña?</a> -->
+                                        
+
+                                    </li>
+
+                                </ol>
+
+                            </fieldset>
+                        </form>
+
+                    </div> <!-- END #contact_info_left -->
+
+                    <div id="contact_info_right">
+
+
+                    </div> <!-- END #contact_info_right -->
+
+                </div> <!-- END #contact_info -->
+
+            </div> <!-- END .container -->
+
+        </div> <!-- END #contact_area -->
+
+    </div> <!-- END #main_content -->
+
+    
+    <div id="footer">
+
+        <div class="container">
+
+            <br>
+            <br>
+                <center>
+                    <img src="images/logo.jpeg" height="250" />
+                    
+                </center>
+ 
+        </div> <!-- END .container -->
+
+    </div> <!-- END #footer -->
+
+
+        <div class="container">
+
+            <h5>VISION</h5>>
+            
+                <div id="location_map">
+                    <center>
+                        <h4>Ser la primera opción que los usuarios piensen para poder obtener la información y ayuda necesaria y 
+                            también colaborar dando tips para poder ser referencias de fotógrafos aficionados , 
+                            básicos y profesionales.</h4>
+                    </center>
+                    
+                </div> <!-- END #location_map -->
+   
+        </div> <!-- END .container -->
+        <div class="container">
+
+            <h5>MISION</h5>>
+            
+                <div id="location_map">
+                    <center>
+                        <h4>Somos un Blog dedicado a ofrecer un servicio confiable en cual podamos brindar transparencia a 
+                            todos nuestros usuarios para poder ser un equipo y ayudar a ser mejor cada fotógrafo que se una.</h4>
+                    </center>
+                    
+                </div> <!-- END #location_map -->
+            
+        
+        </div> <!-- END .container -->
+
+        <div id="footer">
+
+            <div class="container">
+    
+                <div id="footer_about" class="footer_info">
+                    
+                    
+                    <p id="acerca">ACERCA DE 
+                        Sitio  destinado a fotógrafos , 
+                        
+                        sin fines de lucro y con la característica mas 
+                        
+                        importante de brindar información a los que nos buscan.
+                        <br />
+                    </p>
+                    
+    
+                </div> <!-- END #footer_about -->
+    
+                
+                <div id="footer_about" class="footer_info">
+                    
+                    <p id="contacto">CONTACTENOS 
+                        e-mail: fotografia1620@gmail.com
+                        <br />
+                    </p>
+    
+                </div> <!-- END #footer_about -->
+
+                <div id="footer_about" class="footer_info">
+                    
+                    <p id="datos">INFORMACION 
+                        WILLY ROMEO CANO MARTINEZ
+                        <br />
+                    </p>
+    
+                </div> <!-- END #footer_about -->
+                
+    
+    
+            </div> <!-- END .container -->
+    
+        </div> <!-- END #footer -->
+        
+        
+      
+
+    
+
+    <!-- CÓDIGO PARA LOGIN -->
+    <script>
+
+        function iniciar(){
+
+            var usuario = document.getElementById("usuario").value 
+            var contrasenia = document.getElementById("contrasenia").value
+            
+            fetch('http://127.0.0.1:5000/login', {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "usuario": usuario,
+                    "contrasenia": contrasenia             
+                })
+            })
+            .then(res => res.json())
+            .catch(err => {
+                console.log(err)
+                window.alert("Error")
+            })
+            .then(response => {
+                console.log(response)
+                if(response.data['estado'] == 1){
+                    sessionStorage.setItem('id',response.data['id'])
+                    sessionStorage.setItem('usuario',response.data['usuario'])
+                    sessionStorage.setItem('tipousuario',response.data['tipousuario'])
+
+                    if(response.data['tipousuario'] == "Administrador"){
+                        window.location.href = "posts-admin.html";
+                    }
+                    else if (response.data['tipousuario'] == "Cliente"){
+                        window.location.href = "posts-cliente.html";
+                    }
+                    
+                }
+                else if(response.data['estado'] == 2){
+                    window.alert("La contraseña que introduciste es incorrecta")
+                }
+                else if(response.data['estado'] == 3){
+                    window.alert("Usuario no Encontrado")
+                }
+
+              
+            })
+        }
+
+       
+
+        </script>
+    
+    
+    </body>
+    
+    </html>

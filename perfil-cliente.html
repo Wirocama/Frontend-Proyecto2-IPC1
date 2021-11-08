@@ -1,0 +1,338 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Perfil | Fotografía 16 20</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/reset.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/main2.css" />
+
+</head>
+
+<body onload="cargarInfo()">
+
+    <div id="header">
+
+        <div class="container">
+
+            <h1>Fotografía 16 20</h1>
+            <div id="main_menu">
+
+                <ul>
+                    <li class="first_list"><a href="login.html" class="main_menu_first"
+                        sessionStorage.clear()>Cerrar Sesión</a></li>
+                </ul>
+
+            </div> <!-- END #main_menu -->
+
+        </div> <!-- END .container -->
+
+    </div> <!-- END #header -->
+
+    <div id="main_content">
+
+        <div id="portfolio_area">
+
+            <div class="container">
+
+                <div id="portfolio_menu">
+
+                    <ul>
+                        <li><a href="posts-cliente.html">Todos los Posts</a></li>
+                        <li><a href="publicarpost-cliente.html">Publicar Post</a></li>
+                        <li><a href="misposts-cliente.html">Mis Posts</a></li>
+                        <li><a href="perfil-cliente.html">Perfil</a></li>
+                    </ul>
+
+                </div> <!-- END #portfolio_menu -->
+
+            </div> <!-- END .container -->
+
+        </div> <!-- END #portfolio_area -->
+
+    </div> <!-- END #main_content -->
+
+    
+    <div id="main_content">
+
+            <div class="container">
+
+                <center>
+
+                    <h3>Mi Perfil</h3>
+
+                </center>
+               
+            </br>
+            </br>
+
+                <div>
+                    <table class="styled-table" style="text-align: center; margin: auto;">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Género</th>
+                                <th>Usuario</th>
+                                <th>Correo Electrónico</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody id="infoUsuario">
+
+                            
+                            
+            
+                        </tbody>
+                    </table>
+                    
+                <div class="footer_info">
+                    <button type="button" class="btn btn-primary" onclick="datosmodificar()">Modificar Información</button>
+                </div>    
+                </div>
+
+                    <div id="contact_info_left">
+
+                 
+
+                    </div> <!-- END #contact_info_left -->
+
+
+            </div> <!-- END .container -->
+
+            
+
+
+    </div> <!-- END #main_content -->
+
+    <div id="footer">
+
+        <div class="container">
+
+            <div id="footer_about" class="footer_info">
+
+                <img src="images/logo.jpeg" height="100" />
+
+            </div> <!-- END #footer_about -->
+
+            <div id="footer_explore" class="footer_info">
+
+
+            </div> <!-- END #footer_about -->
+
+            <div id="footer_browse" class="footer_info">
+
+
+            </div> <!-- END #footer_about -->
+
+            <div id="footer_contact" class="footer_info">
+
+
+
+            </div> <!-- END #footer_about -->
+
+            <div id="footer_connect" class="footer_info">
+
+            </div class="container"> <!-- END #footer_about -->
+
+            <p id="copyright">&copy; Copyright 2020
+                <br />
+            </p>
+
+
+        </div> <!-- END .container -->
+
+    </div> <!-- END #footer -->
+
+    <script>
+
+        var usuarioG = sessionStorage.getItem('usuario');
+        var idG = sessionStorage.getItem('id');
+
+        function cargarInfo() {
+
+            fetch('http://127.0.0.1:5000/ver_usuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "id": idG
+            })
+        })
+        .then(res => res.json())
+        .catch(err => {
+            console.log(err)
+            window.alert("Error")
+        })
+        .then(response => {
+            console.log(response)
+            var info = response['data'];
+            var tabla = document.querySelector('#infoUsuario')
+
+            tabla.innerHTML = `
+            <tr>
+                <td>${info['nombre']}</td>
+                <td>${info['genero']}</td>
+                <td>${info['nusuario']}</td>
+                <td>${info['correo']}</td>
+            </tr>`
+             
+        })
+
+    }
+
+    function datosmodificar(){
+
+        fetch('http://127.0.0.1:5000/ver_usuario', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                    "id": idG
+            })
+        })
+        .then(res => res.json())
+        .catch(err => {
+            console.log(err)
+            window.alert("Error")
+        })
+        .then(response => {
+            console.log(response)
+            var info = response['data'];
+            var genero1 = ''
+            var genero2 = ''
+
+            if (info['genero'] == 'Masculino'){
+                genero1 = 'Masculino';
+                genero2 = 'Femenino';
+            }
+            else{
+                genero1 = 'Femenino';
+                genero2 = 'Masculino';     
+            }
+            var infoCrear = document.querySelector('#contact_info_left')
+            infoCrear.innerHTML = `
+            <h3>Modificar Información</h3>
+            </br>
+            </br>
+
+            <form id="contact_form" role="form">
+                <fieldset>
+                    <ol>
+                        <li>
+                            <label style= "font-size: large;" for="nombre">Nombre:</label><input type="text" size="60" maxlength=""
+                                id="nombre" />
+                        </li>
+                        <li>
+                            <label style= "font-size: large;" for="apellido">Género:</label>
+                            <select class="second_list second_list_border" id="genero">
+                            <option value="genero1">${genero1}</option>
+                            <option value="genero2">${genero2}</option>
+                                            
+                            </select>
+                                            
+                        </li>
+                        <li>
+                            <label style= "font-size: large;" for="usuario">Usuario:</label><input type="text" size="60"
+                                maxlength="" id="usuario" />
+                        </li>
+                        <li>
+                            <label style= "font-size: large;" for="correo">Correo Electrónico:</label><input type="text" size="60"
+                                maxlength="" id="correo" />
+                        </li>
+                        <li>
+                            <label style= "font-size: large;" for="contrasenia">Contraseña:</label><input type="password" size="60"
+                                maxlength="" id="contrasenia" />
+                        </li>
+                        <li>
+                            <label style= "font-size: large;" for="conf_contrasenia">Confirmar Contraseña:</label><input type="password" size="60"
+                                maxlength="" id="conf_contrasenia" />
+                        </li>
+                        <li>
+                            </br>
+                            </br>
+                            <button type="button" class="btn btn-primary" onclick="modificar()">Modificar Información</button>
+
+                        </li>
+
+                    </ol>
+
+                </fieldset>
+            </form>
+        `
+            document.getElementById("nombre").value = info['nombre']
+            document.getElementById("usuario").value = info['nusuario']
+            document.getElementById("correo").value = info['correo']
+            
+                
+        })
+
+    }
+
+
+    function modificar(){
+
+        var nombre = document.getElementById("nombre").value
+
+        var seleccion_genero = document.getElementById("genero").options.selectedIndex
+        var genero = document.getElementById("genero").options[seleccion_genero].text
+
+        var usuario = document.getElementById("usuario").value
+        var correo = document.getElementById("correo").value 
+        var contrasenia = document.getElementById("contrasenia").value 
+        var conf_contrasenia = document.getElementById("conf_contrasenia").value
+
+        fetch('http://127.0.0.1:5000/modificar_usuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "id": idG,
+                    "nombre": nombre,
+                    "genero": genero,
+                    "nusuario": usuario,
+                    "correo": correo,
+                    "contrasenia": contrasenia,
+                    "conf_contrasenia": conf_contrasenia
+                })
+            })
+            .then(res => res.json())
+            .catch(err => {
+                console.log(err)
+                window.alert("Error")
+            })
+            .then(response => {
+                console.log(response)
+                
+                if(response.data['estado'] == 1){
+                    window.alert("Se Actualizó tu información " + response.data['nombre'])
+                    window.location.href = "perfil-cliente.html";
+      
+                }
+                else if(response.data['estado'] == 2){
+                    window.alert("El Nombre de Usuario no esta disponible")
+                }
+                else if(response.data['estado'] == 3){
+                    window.alert("La contraseña de verificación no coincide")
+                }
+                
+       
+
+            
+                
+
+            })
+
+    }
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
