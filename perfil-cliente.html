@@ -150,7 +150,7 @@
 
         function cargarInfo() {
 
-            fetch('http://127.0.0.1:5000/ver_usuario', {
+            fetch('https://backendproyecto2ipc1.herokuapp.com/ver_usuario', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -183,7 +183,7 @@
 
     function datosmodificar(){
 
-        fetch('http://127.0.0.1:5000/ver_usuario', {
+        fetch('https://backendproyecto2ipc1.herokuapp.com/ver_usuario', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -283,7 +283,7 @@
         var contrasenia = document.getElementById("contrasenia").value 
         var conf_contrasenia = document.getElementById("conf_contrasenia").value
 
-        fetch('http://127.0.0.1:5000/modificar_usuario', {
+        fetch('https://backendproyecto2ipc1.herokuapp.com/modificar_usuario', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

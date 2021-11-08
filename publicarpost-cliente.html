@@ -173,7 +173,7 @@
         var seleccion_tipo = document.getElementById("tipo").options.selectedIndex
         var tipo = document.getElementById("tipo").options[seleccion_tipo].text
 
-        fetch('http://127.0.0.1:5000/crear_publicacion', {
+        fetch('https://backendproyecto2ipc1.herokuapp.com/crear_publicacion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
